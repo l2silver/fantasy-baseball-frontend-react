@@ -1,0 +1,41 @@
+{
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true,
+  },
+  "env": {
+    "browser": true,
+  },
+  "extends": [
+    "airbnb",
+    "plugin:flowtype/recommended"
+  ],
+  "parser": "babel-eslint",
+  "rules": {
+    "quotes": [2, "single"],
+    "strict": [2, "never"],
+    "babel/generator-star-spacing": 1,
+    "babel/object-shorthand": 1,
+    "babel/arrow-parens": 0,
+    "babel/no-await-in-loop": 1,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
+    "no-unused-vars": 1,
+    "react/jsx-filename-extension": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "no-underscore-dangle": 0,
+    "no-tabs": 0,
+    "react/no-multi-comp": 0,
+    "react/prefer-stateless-function": 0,
+    "no-param-reassign": 0,
+    "import/prefer-default-export": 0
+  },
+  "plugins": [
+    "babel",
+    "react",
+    "flowtype"
+  ]
+}

@@ -1,0 +1,17 @@
+[libs]
+flow-typed
+[ignore]
+.*/kefir/.*
+[options]
+module.name_mapper='^@ps' -> '<PROJECT_ROOT>/src/@ps'
+module.name_mapper='^components' -> '<PROJECT_ROOT>/src/components'
+module.name_mapper='^panels' -> '<PROJECT_ROOT>/src/components/panels'
+module.name_mapper='^.*\.pcss$' -> 'empty/object'
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+module.file_ext=.css
+module.file_ext=.scss
+module.file_ext=.pcss
