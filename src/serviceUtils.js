@@ -13,7 +13,7 @@ const fetch = function fetch(url, options) {
 };
 
 // const { MAIN_ADDRESS } = process.env;
-const MAIN_ADDRESS = process.env === 'development' ? 'http://localhost:8090/' : 'https://fantasy-baseball-20-backend.herokuapp.com';
+const MAIN_ADDRESS = process.env === 'development' ? 'http://localhost:8090/' : 'https://fantasy-baseball-20-backend.herokuapp.com/';
 
 const getDefaultOptions = method => ({
   method,
