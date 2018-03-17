@@ -21,6 +21,5 @@ module.exports = {
     })
   ]),
   module: common.module,
-  postcss: common.postcss
 };
 
