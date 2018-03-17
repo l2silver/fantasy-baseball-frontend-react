@@ -5,7 +5,7 @@ import composeHors from 'redux-compose-hors';
 import reduxThunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
-import reducers from '@ps/reducers';
+// import reducers from '@ps/reducers';
 
 export { browserHistory };
 
@@ -21,7 +21,7 @@ const enhancer = composeEnhancers(
 );
 
 const allReducers = combineReducers({
-  ...reducers,
+  // ...reducers,
   routing: routerReducer,
 });
 
