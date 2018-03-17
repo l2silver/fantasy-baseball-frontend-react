@@ -8,7 +8,7 @@
     "build:webpack": "webpack --config webpack.config.prod.js",
     "build": "NODE_ENV=production npm run clean && npm run build:webpack",
     "start-development": "node devServer.js",
-    "start": "node server.js NODE_ENV=production",
+    "start": "npm run build && node server.js",
     "lint": "eslint src",
     "flow": "flow",
     "flowtyped": "flow-typed",
