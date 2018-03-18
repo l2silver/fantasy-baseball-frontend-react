@@ -77,6 +77,9 @@ export default class Position extends PureComponent {
       data={this.props.data}
       columns={columns}
       defaultPageSize={100}
+      SubComponent={(row)=>{
+        return <div>{row.viewIndex + 1}</div>
+      }}
     />
     </div>);
   }
