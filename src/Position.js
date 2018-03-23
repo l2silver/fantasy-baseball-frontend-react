@@ -90,6 +90,7 @@ export default class Position extends PureComponent {
             <TextArea rows={5} defaultValue={row.value || ""} onChange={this.handleNotesChange.bind(this, row.original)} />
           )
         },
+        width: 300,
       } : {
 
       })

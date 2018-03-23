@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-import {debounce} from 'lodash'
+import {debounce} from 'lodash';
+import styles from './style.pcss';
 
 export default class TextArea extends React.PureComponent {
   constructor(props){
@@ -11,6 +12,6 @@ export default class TextArea extends React.PureComponent {
     return this.debHandleChange(e.target.value);
   }
   render(){
-    return <textarea {...this.props} onChange={this.handleChange} />;
+    return <textarea className={styles.width} {...this.props} onChange={this.handleChange} />;
   }
 }
