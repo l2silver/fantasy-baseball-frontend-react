@@ -34,10 +34,12 @@ export default class Position extends PureComponent {
     const columns = columnNames.map((name) => ({
       Header: name,
       accessor: name,
+      width: 60,
       ...(name === 'name' ? {
         filterable: true,
         filterMethod: (filter, rows) => marchSorter(rows, filter.value, { keys: ['name'] }),
         filterAll: true,
+        width: 200
       } : {}),
       ...(name === 'notes' || name === 'injuries' || name === 'prospect' ? {
         Cell: row => {
