@@ -5,69 +5,24 @@ import marchSorter from 'match-sorter';
 import classnames from 'classnames';
 import styles from './style.pcss';
 import TextArea from './TextArea';
+import TextInput from './TextInput';
 import { userUpdate } from './serviceUtils';
 
-const attributes = [
-  'name',
-  'position',
-  'value',
-  'zscore',
-  'team',
-  'g',
-  'pa',
-  'ab',
-  'h',
-  '2b',
-  '3b',
-  'hr',
-  'r',
-  'rbi',
-  'bb',
-  'so',
-  'hbp',
-  'nsb',
-  'sb',
-  'cs',
-  'avg',
-  'obp',
-  'slg',
-  'ops',
-  'woba',
-  'fld',
-  'bsr',
-  'war',
-  'adp',
-  'playerid',
-  'notes',
-];
-
-const state = attributes.reduce((finalResult, val)=>{
-  if (!finalResult[val]) finalResult[val] = false;
-  return finalResult;
-}, {
-  name: true,
-  value: true,
-  position: true,
-  zscore: true,
-  team: true,
-  g: true,
-  hr: true,
-  r: true,
-  rbi: true,
-  nsb: true,
-  obp: true,
-  notes: true,
-})
 export default class Position extends PureComponent {
-  state = state
+  constructor(props){
+    super(props)
+    this.state = props.attributes.reduce((finalResult, val)=>{
+      if (!finalResult[val]) finalResult[val] = false;
+      return finalResult;
+    }, props.initialAttributes);
+  }
   toggleAttr = (attr)=>{
     this.setState({
       [attr]: !this.state[attr],
     })
   }
-  handleNotesChange = (player, notes)=>{
-    console.log('notes', notes);
-    return userUpdate(player.playerid, { notes }).then(()=>{
+  handleChange = (name, player, value)=>{
+    return userUpdate(player.playerid, { [name]: value }).then(()=>{
       this.props.reset();
     });
   }
@@ -84,26 +39,32 @@ export default class Position extends PureComponent {
         filterMethod: (filter, rows) => marchSorter(rows, filter.value, { keys: ['name'] }),
         filterAll: true,
       } : {}),
-      ...(name === 'notes' ? {
+      ...(name === 'notes' || name === 'injuries' || name === 'prospect' ? {
         Cell: row => {
           return (
-            <TextArea rows={5} defaultValue={row.value || ""} onChange={this.handleNotesChange.bind(this, row.original)} />
+            <TextArea rows={5} defaultValue={row.value || ""} onChange={this.handleChange.bind(this, name, row.original)} />
           )
         },
         width: 300,
-      } : {
-
-      })
+      } : {}),
+      ...(name === 'tier' || name === 'drafted' ? {
+        Cell: row => {
+          return (
+            <TextInput defaultValue={row.value || ""} onChange={this.handleChange.bind(this, name, row.original)} />
+          )
+        },
+        width: 50,
+      } : {}),
     }));
     return (<div>
       {
-        attributes.map(attr => <span key={attr} className={classnames(styles.selectProps, {
+        this.props.attributes.map(attr => <span key={attr} className={classnames(styles.selectProps, {
           [styles.active]: this.state[attr],
         })} onClick={this.toggleAttr.bind(this, attr)}>{attr}</span>)
       }
       <ReactTable
       defaultSorted={[
-        { id: "zscore", desc: true },
+        { id: "value", desc: true },
       ]}
       data={this.props.data}
       columns={columns}

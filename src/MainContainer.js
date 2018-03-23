@@ -5,7 +5,6 @@ import 'react-table/react-table.css';
 import { get, getUrl } from './serviceUtils';
 
 import Position from './Position';
-import PitcherPosition from './PitcherPosition';
 
 const positions = ['c', '1b', '2b', 'ss', '3b', 'rf', 'cf', 'lf']
 const pitcherPositions = ['p', 'rp'];
@@ -26,6 +25,101 @@ const playerNumbers = {
   'lf': 35,
   // 'of': 95,
 };
+
+const defaultAttrs = [
+  'name',
+  'position',
+  'value',
+  'zscore',
+  'team',
+  'g',
+  'notes',
+  'tier',
+  'injuries',
+  'prospect',
+  'drafted',
+]
+
+const attrs = {
+  player: [
+    ...defaultAttrs,
+    'pa',
+    'ab',
+    'h',
+    '2b',
+    '3b',
+    'hr',
+    'r',
+    'rbi',
+    'bb',
+    'so',
+    'hbp',
+    'nsb',
+    'sb',
+    'cs',
+    'avg',
+    'obp',
+    'slg',
+    'ops',
+    'woba',
+    'fld',
+    'bsr',
+    'war',
+    'adp',
+    'playerid',
+  ],
+  pitcher: [
+    'gs',
+    'ip',
+    'era',
+    'whip',
+    'so',
+    'sv',
+    'w',
+    'adp',
+    'playerid',
+  ],
+};
+
+const defaultInitAttribs = {
+  name: true,
+  value: true,
+  position: true,
+  team: true,
+  g: true,
+};
+
+const endDefaultAttribs = {
+  'tier': true,
+  'drafted': true,
+  notes: true,
+  'injuries': true,
+  'prospect': true,
+}
+
+const initialAttributes = {
+  player: {
+    ...defaultInitAttribs,
+    hr: true,
+    r: true,
+    rbi: true,
+    nsb: true,
+    obp: true,
+    ...endDefaultAttribs,
+  },
+  pitcher: {
+    ...defaultInitAttribs,
+    'gs': true,
+    'ip': true,
+    'era': true,
+    'whip': true,
+    'so': true,
+    'sv': true,
+    'w': true,
+    ...endDefaultAttribs,
+  }
+}
+
 const playersValued = {
 
 }
@@ -220,7 +314,14 @@ class MainContainer extends PureComponent {
   getFinalPitcherData = () => {
     return this.state.pitchers.data[this.state.position];
   }
-  render() {    
+  render() {
+    const additionalProps = !pitcherPositionsObj[this.state.position] ? {
+      attributes: attrs.player,
+      initialAttributes: initialAttributes.player,
+    } : {
+      attributes: attrs.pitcher,
+      initialAttributes: initialAttributes.pitcher,
+    }
     return (<div>
       <ul className="nav nav-tabs">
         {
@@ -230,9 +331,7 @@ class MainContainer extends PureComponent {
           )
         }
       </ul>
-      {
-        pitcherPositionsObj[this.state.position] ? <PitcherPosition key={this.state.position} reset={this.reset} data={this.getFinalPitcherData()} /> : <Position key={this.state.position} reset={this.reset} data={this.getFinalData()} />
-      }
+      <Position key={this.state.position} reset={this.reset} data={this.getFinalData()} {...additionalProps} />
       
       
     </div>);
