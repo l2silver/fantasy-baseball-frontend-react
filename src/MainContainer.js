@@ -33,12 +33,15 @@ const defaultAttrs = [
   'zscore',
   'team',
   'g',
+]
+
+const endDefAttrs = [
   'notes',
   'tier',
   'injuries',
   'prospect',
   'drafted',
-]
+];
 
 const attrs = {
   player: [
@@ -67,8 +70,10 @@ const attrs = {
     'war',
     'adp',
     'playerid',
+    ...endDefAttrs,
   ],
   pitcher: [
+    ...defaultAttrs,
     'gs',
     'ip',
     'era',
@@ -78,6 +83,7 @@ const attrs = {
     'w',
     'adp',
     'playerid',
+    ...endDefAttrs,
   ],
 };
 
@@ -318,9 +324,11 @@ class MainContainer extends PureComponent {
     const additionalProps = !pitcherPositionsObj[this.state.position] ? {
       attributes: attrs.player,
       initialAttributes: initialAttributes.player,
+      data: this.getFinalData(),
     } : {
       attributes: attrs.pitcher,
       initialAttributes: initialAttributes.pitcher,
+      data: this.getFinalPitcherData(),
     }
     return (<div>
       <ul className="nav nav-tabs">
@@ -331,7 +339,7 @@ class MainContainer extends PureComponent {
           )
         }
       </ul>
-      <Position key={this.state.position} reset={this.reset} data={this.getFinalData()} {...additionalProps} />
+      <Position key={this.state.position} reset={this.reset} {...additionalProps} />
       
       
     </div>);
