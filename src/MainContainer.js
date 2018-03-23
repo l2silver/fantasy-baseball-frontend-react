@@ -15,6 +15,52 @@ const pitcherPositionsObj = allPitcherPositions.reduce((finalResult, p)=>{
   return finalResult;
 },{})
 const tables = positions.concat(allPitcherPositions).concat(['all']);
+const playerNumbers = {
+  c: 20, 
+  '1b': 25,
+  '2b': 25,
+  'ss': 25,
+  '3b': 25,
+  'rf': 30,
+  'cf': 30,
+  'lf': 35,
+  // 'of': 95,
+};
+const playersValued = {
+
+}
+
+const pitchersValued = {
+  
+}
+const totalAvailable = 215;
+const totalMoney = 150 * 14; // 2100
+const totalPlayers = 11 * 14; // 154
+const attributes = ['nsb', 'rbi', 'r', 'hr', 'obp'];
+const pitcherAttributes = ['era', 'whip', 'so', 'sv', 'w'];
+const pitcherNumbers = {
+  p: 125,
+  rp: 90,
+}
+
+const getRP = (player)=>({
+  ...player, rp: player.gs < 7 || player.gp > 40,
+});
+
+const getNSB = player => ({ ...player, nsb: (player.sb - player.cs) });
+const getPosition = (position, player) => ({ ...player, position });
+const getzscoreAtIndex = (zscores, index, attrs = attributes) => attrs.reduce((finalResult, stat) => {
+  if (stat === 'sv') {
+    // console.log('sv', zscores[stat][index]);
+  }
+  if (stat === 'era' || stat === 'whip') {
+    return finalResult - zscores[stat][index];
+  }
+  return finalResult + zscores[stat][index];
+}, 10);
+const getProperPlayers = (allData, key, numbers) => {
+  return allData[key].slice(0, numbers[key]);
+};
 class MainContainer extends PureComponent {
   constructor(props) {
     super(props);
@@ -33,53 +79,7 @@ class MainContainer extends PureComponent {
     data: Object;
     position: string;
   };
-  componentWillMount() {
-    const playerNumbers = {
-      c: 20, 
-      '1b': 25,
-      '2b': 25,
-      'ss': 25,
-      '3b': 25,
-      'rf': 30,
-      'cf': 30,
-      'lf': 35,
-      // 'of': 95,
-    };
-    const playersValued = {
-
-    }
-
-    const pitchersValued = {
-      
-    }
-    const totalAvailable = 215;
-    const totalMoney = 150 * 14; // 2100
-    const totalPlayers = 11 * 14; // 154
-    const attributes = ['nsb', 'rbi', 'r', 'hr', 'obp'];
-    const pitcherAttributes = ['era', 'whip', 'so', 'sv', 'w'];
-    const pitcherNumbers = {
-      p: 125,
-      rp: 90,
-    }
-
-    const getRP = (player)=>({
-      ...player, rp: player.gs < 7 || player.gp > 40,
-    });
-
-    const getNSB = player => ({ ...player, nsb: (player.sb - player.cs) });
-    const getPosition = (position, player) => ({ ...player, position });
-    const getzscoreAtIndex = (zscores, index, attrs = attributes) => attrs.reduce((finalResult, stat) => {
-      if (stat === 'sv') {
-        // console.log('sv', zscores[stat][index]);
-      }
-      if (stat === 'era' || stat === 'whip') {
-        return finalResult - zscores[stat][index];
-      }
-      return finalResult + zscores[stat][index];
-    }, 10);
-    const getProperPlayers = (allData, key, numbers) => {
-      return allData[key].slice(0, numbers[key]);
-    };
+  reset = () => {
     get(getUrl('users')).then((allData) => {
       const data = Object.keys(playerNumbers).reduce((finalResult, key) => {
         const players = getProperPlayers(allData, key, playerNumbers);
@@ -211,6 +211,9 @@ class MainContainer extends PureComponent {
       });
     });
   }
+  componentWillMount() {
+    this.reset();
+  }
   getFinalData = () => {
     return this.state.players.data[this.state.position];
   }
@@ -228,7 +231,7 @@ class MainContainer extends PureComponent {
         }
       </ul>
       {
-        pitcherPositionsObj[this.state.position] ? <PitcherPosition data={this.getFinalPitcherData()} /> : <Position data={this.getFinalData()} />
+        pitcherPositionsObj[this.state.position] ? <PitcherPosition key={this.state.position} reset={this.reset} data={this.getFinalPitcherData()} /> : <Position key={this.state.position} reset={this.reset} data={this.getFinalData()} />
       }
       
       

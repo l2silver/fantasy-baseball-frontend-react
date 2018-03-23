@@ -13,7 +13,7 @@ const fetch = function fetch(url, options) {
 };
 
 // const { MAIN_ADDRESS } = process.env;
-const MAIN_ADDRESS = process.env === 'development' ? 'http://localhost:8090/' : 'https://fantasy-baseball-20-backend.herokuapp.com/';
+const MAIN_ADDRESS = process.env.NODE_ENV === 'development' ? 'http://localhost:8090/' : 'https://fantasy-baseball-20-backend.herokuapp.com/';
 
 const getDefaultOptions = method => ({
   method,
@@ -26,7 +26,10 @@ const getDefaultOptions = method => ({
 
 export const get = (url: string, options: Object = {}) => fetch(url, merge(options, getDefaultOptions('GET')));
 export const put = (url: string, options: Object = {}) => fetch(url, merge(options, getDefaultOptions('PUT')));
-export const patch = (url: string, options: Object = {}) => fetch(url, merge(options, getDefaultOptions('PATCH')));
+export const patch = (url: string, options: Object = {}) => {
+  const opts = merge(options, getDefaultOptions('PATCH'));
+  return fetch(url, opts);
+}
 export const post = (url: string, options: Object = {}) => fetch(url, merge(options, getDefaultOptions('POST')));
 export const del = (url: string, options: Object = {}) => fetch(url, merge(options, getDefaultOptions('DELETE')));
 
@@ -43,3 +46,8 @@ export function getUrl(prefix: string, url?: $url) {
   return `${MAIN_ADDRESS}${prefix}${processUrl(url)}`;
 }
 
+export const userUpdate = (playerid, body) => {
+  return patch(getUrl('users', playerid), {body: JSON.stringify(body)}).catch(()=>{
+    
+  });
+}

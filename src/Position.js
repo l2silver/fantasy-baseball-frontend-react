@@ -4,6 +4,8 @@ import ReactTable from 'react-table';
 import marchSorter from 'match-sorter';
 import classnames from 'classnames';
 import styles from './style.pcss';
+import TextArea from './TextArea';
+import { userUpdate } from './serviceUtils';
 
 const attributes = [
   'name',
@@ -36,6 +38,7 @@ const attributes = [
   'war',
   'adp',
   'playerid',
+  'notes',
 ];
 
 const state = attributes.reduce((finalResult, val)=>{
@@ -53,6 +56,7 @@ const state = attributes.reduce((finalResult, val)=>{
   rbi: true,
   nsb: true,
   obp: true,
+  notes: true,
 })
 export default class Position extends PureComponent {
   state = state
@@ -60,6 +64,12 @@ export default class Position extends PureComponent {
     this.setState({
       [attr]: !this.state[attr],
     })
+  }
+  handleNotesChange = (player, notes)=>{
+    console.log('notes', notes);
+    return userUpdate(player.playerid, { notes }).then(()=>{
+      this.props.reset();
+    });
   }
   render() {
     const columnNames = Object.keys(this.state).reduce((finalResult, key)=>{
@@ -74,6 +84,15 @@ export default class Position extends PureComponent {
         filterMethod: (filter, rows) => marchSorter(rows, filter.value, { keys: ['name'] }),
         filterAll: true,
       } : {}),
+      ...(name === 'notes' ? {
+        Cell: row => {
+          return (
+            <TextArea rows={5} defaultValue={row.value || ""} onChange={this.handleNotesChange.bind(this, row.original)} />
+          )
+        },
+      } : {
+
+      })
     }));
     return (<div>
       {

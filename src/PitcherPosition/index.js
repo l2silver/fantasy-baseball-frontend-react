@@ -21,6 +21,7 @@ const attributes = [
   'w',
   'adp',
   'playerid',
+  'notes',
 ];
 
 const state = attributes.reduce((finalResult, val)=>{
@@ -42,6 +43,7 @@ const state = attributes.reduce((finalResult, val)=>{
   'w': true,
   'adp': true,
   'playerid': true,
+  notes: true,
 })
 export default class Position extends PureComponent {
   state = state
